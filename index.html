@@ -51,7 +51,7 @@
       btn.disabled = true;
       const time = Math.round((Date.now() - start) / 1000);
 
-      const res = await fetch("https://TUO-BACKEND/press", {
+      const res = await fetch("http://play.nutro.cloud:25580/press", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ time })
