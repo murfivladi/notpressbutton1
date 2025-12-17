@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Il Bottone Rosso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #0b0b0b;
+      color: #eaeaea;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .box { max-width: 420px; }
+    h1 { font-size: 2rem; margin-bottom: 10px; }
+    p { opacity: 0.8; }
+    button {
+      margin-top: 30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: none;
+      background: #c40000;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 30px #c40000aa;
+    }
+    button:active { transform: scale(0.96); }
+    .result { margin-top: 30px; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>NON PREMERE IL PULSANTE</h1>
+    <p>Questo non è un gioco.</p>
+    <button id="btn">PREMI</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('btn');
+    const result = document.getElementById('result');
+    const start = Date.now();
+
+    btn.onclick = async () => {
+      btn.disabled = true;
+      const time = Math.round((Date.now() - start) / 1000);
+
+      const res = await fetch("https://TUO-BACKEND/press", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ time })
+      });
+
+      const data = await res.json();
+
+      result.innerHTML = `
+        Hai fatto quello che ti era stato detto di non fare.<br><br>
+        <b>${data.pressed}%</b> delle persone preme.<br>
+        Tempo medio: <b>${data.avg}s</b>
+      `;
+    };
+  </script>
+</body>
+</html>
